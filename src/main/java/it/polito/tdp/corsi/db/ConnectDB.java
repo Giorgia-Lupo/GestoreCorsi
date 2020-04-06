@@ -1,14 +1,15 @@
 package it.polito.tdp.corsi.db;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-public class ConnectDB {
+public class ConnectDB { //SOLITAMENTE GIA' FATTA!!!
 
-	private static final String jdbcURL = "jdbc:mysql://localhost/iscritticorsi";
+	/*private static final String jdbcURL = "jdbc:mysql://localhost/iscritticorsi";
 	private static HikariDataSource ds;
 	
 	public static Connection getConnection() {
@@ -31,5 +32,10 @@ public class ConnectDB {
 			System.err.println("Errore di connessione ad db");
 			throw new RuntimeException(e);
 		}
+	}*/
+	
+	public static Connection getConnection() throws SQLException{
+		String jdbcURL = "jdbc:mysql://localhost/iscritticorsi?user=root&password=root";
+		return DriverManager.getConnection(jdbcURL);
 	}
 }

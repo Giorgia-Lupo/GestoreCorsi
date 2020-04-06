@@ -9,11 +9,35 @@ import java.util.*;
 
 
 import it.polito.tdp.corsi.model.Corso;
+import it.polito.tdp.corsi.model.Studente;
 
 public class CorsoDAO {
 
 	//fornire metodo per recuperare tutti i corsi di un determinato periodo didattico	
 	//Creo la classe Corso nel model.
+	
+	public boolean esisteCorso(String codins) {
+		String sql="SELECT * from corso WHERE codins = ?";
+		
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			
+			st.setString(1, codins);
+			ResultSet r = st.executeQuery();
+			
+			if(r.next()) {
+				conn.close();//!!!!!!!!!!!!!!!!!!!!!!!!
+				return true;
+			}else {
+				conn.close();
+				return false;
+			}			
+		}catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
 	
 	public List<Corso> getCorsiByPeriodo(Integer pd){
 		
@@ -70,6 +94,59 @@ public class CorsoDAO {
 		return result;
 	}
 	
+	public List<Studente> getStudentiByCorso(Corso c){
+		
+		String sql = "SELECT * FROM studente AS s, iscrizione AS i " + 
+				" WHERE s.matricola = i.matricola AND i.codins= ? ";
+		List<Studente> studenti = new LinkedList<>();
+		
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			
+			st.setString(1, c.getCodins());
+			ResultSet res = st.executeQuery();
+			
+			while(res.next()) {
+				Studente s = new Studente(res.getInt("matricola"), res.getString("nome"),
+						res.getString("cognome"), res.getString("CDS"));
+				studenti.add(s);						
+			}
+			
+			conn.close();
+			
+		}catch(SQLException e ) {
+			throw new RuntimeException(e);
+		}
+		
+		return studenti;
+	}
 	
-	
+	public Map<String, Integer> getDivisioneCDS (Corso c){
+		
+		String sql = "SELECT s.CDS, COUNT(*) AS tot " + 
+				"  from studente AS s, iscrizione AS i " + 
+				"  WHERE s.matricola = i.matricola AND s.CDS<> \"\" and  i.codins = ? " + 
+				"  GROUP BY s.CDS";
+		Map<String, Integer> statistiche = new HashMap<>();
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			
+			st.setString(1, c.getCodins());
+			ResultSet res = st.executeQuery();
+			
+			while(res.next()) {
+				statistiche.put(res.getString("CDS"), res.getInt("tot"));					
+			}
+			
+			conn.close();
+			
+		}catch(SQLException e ) {
+			throw new RuntimeException(e);
+		}
+		
+		return statistiche;
+	}
+		
 }

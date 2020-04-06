@@ -3,11 +3,11 @@ package it.polito.tdp.corsi.model;
 public class Corso {
 
 	private String codins;
-	private int crediti;
+	private Integer crediti;
 	private String nome;
-	private int pd;
+	private Integer pd;
 		
-	public Corso(String codins, int crediti, String nome, int pd) {
+	public Corso(String codins, Integer crediti, String nome, Integer pd) {
 		this.codins = codins;
 		this.crediti = crediti;
 		this.nome = nome;
@@ -22,11 +22,11 @@ public class Corso {
 		this.codins = codins;
 	}
 
-	public int getCrediti() {
+	public Integer getCrediti() {
 		return crediti;
 	}
 
-	public void setCrediti(int crediti) {
+	public void setCrediti(Integer crediti) {
 		this.crediti = crediti;
 	}
 
@@ -38,11 +38,11 @@ public class Corso {
 		this.nome = nome;
 	}
 
-	public int getPd() {
+	public Integer getPd() {
 		return pd;
 	}
 
-	public void setPd(int pd) {
+	public void setPd(Integer pd) {
 		this.pd = pd;
 	}
 
@@ -75,6 +75,8 @@ public class Corso {
 			return false;
 		return true;
 	}
+
+	
 	
 	
 	
